@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace Avalonia\Component\Message;
 
+use Avalonia\Core\KernelInterface;
+
 /**
  * Interface ExchangeInterface
  * @package Avalonia\Component\Message
@@ -15,7 +17,7 @@ interface ExchangeInterface
      * @param mixed $default
      * @return mixed
      *
-     * Return the the property associated with $name or $default if it doesn't exist.
+     * Return the property associated with $name or $default if it doesn't exist.
      */
     public function getProperty(string $name, $default = null);
 
@@ -43,6 +45,13 @@ interface ExchangeInterface
      * Set a property. Return its previous value if it had one, and null instead.
      */
     public function setProperty(string $name, $value);
+
+    /**
+     * @return array
+     *
+     * Return all the defined properties.
+     */
+    public function getProperties(): array;
 
     /**
      * @return MessageInterface
@@ -77,7 +86,7 @@ interface ExchangeInterface
      * @param MessageInterface $message
      * @return void
      *
-     * Set the current outbound message
+     * Set the current outbound message.
      */
     public function setOut(MessageInterface $message);
 
@@ -89,15 +98,15 @@ interface ExchangeInterface
     public function hasOut(): bool;
 
     /**
-     * Returns the context so that a processor can resolve endpoints from URIs
-     *
-     * @return ContextInterface
+     * @return KernelInterface
      */
-    public function getContext(): ContextInterface;
+    public function getKernel(): KernelInterface;
 
     /**
+     * @return ExchangeInterface
+     *
      * Creates a copy of the current message exchange so that it can be
-     * forwarded to another destination
+     * forwarded to another destination.
      */
     public function copy(): ExchangeInterface;
 
@@ -106,7 +115,7 @@ interface ExchangeInterface
      * @return void
      *
      * Set the current exception in exchange process.
-     * After being called, the ExchangeInterface::isFailed() method will return true
+     * After being called, the ExchangeInterface::isFailed() method will return true.
      */
     public function setException(\Throwable $exception);
 
@@ -136,7 +145,7 @@ interface ExchangeInterface
     /**
      * @return string
      *
-     * Get the exchange id
+     * Get the exchange id.
      */
     public function getExchangeId(): string;
 
@@ -144,7 +153,7 @@ interface ExchangeInterface
      * @param string $exchangeId
      * @return void
      *
-     * Set the exchange id
+     * Set the exchange id.
      */
     public function setExchangeId(string $exchangeId);
 }

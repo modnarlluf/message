@@ -3,7 +3,8 @@
     "description": "Network protocols message abstraction layer",
     "require": {
         "container-interop/container-interop": "^1.1",
-        "avalonia/core": "^0.1@dev"
+        "avalonia/core": "^0.1@dev",
+        "hoa/stream": "^0.15.08.28"
     },
     "require-dev": {
         "phpunit/phpunit": "^5.1"

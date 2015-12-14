@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 
 namespace Avalonia\Component\Message;
+use Avalonia\Core\KernelInterface;
 
 /**
  * Class DefaultExchange
@@ -28,17 +29,17 @@ class DefaultExchange implements ExchangeInterface
     /** @var null|MessageInterface */
     private $out;
 
-    /** @var ContextInterface */
-    private $context;
+    /** @var KernelInterface */
+    private $kernel;
 
     /**
      * DefaultExchange constructor.
-     * @param ContextInterface $context
+     * @param KernelInterface $context
      * @param MessageInterface $in
      */
-    public function __construct(ContextInterface $context, MessageInterface $in)
+    public function __construct(KernelInterface $kernel, MessageInterface $in)
     {
-        $this->context = $context;
+        $this->kernel = $kernel;
         $this->in = $in;
     }
 
@@ -108,6 +109,16 @@ class DefaultExchange implements ExchangeInterface
     }
 
     /**
+     * @return array
+     *
+     * Return all the defined properties.
+     */
+    public function getProperties(): array
+    {
+        return $this->properties;
+    }
+
+    /**
      * @return MessageInterface
      *
      * Return the current inbound message.
@@ -149,7 +160,7 @@ class DefaultExchange implements ExchangeInterface
      * @param MessageInterface $message
      * @return void
      *
-     * Set the current outbound message
+     * Set the current outbound message.
      */
     public function setOut(MessageInterface $message)
     {
@@ -167,18 +178,18 @@ class DefaultExchange implements ExchangeInterface
     }
 
     /**
-     * Returns the context so that a processor can resolve endpoints from URIs
-     *
-     * @return ContextInterface
+     * @return KernelInterface
      */
-    public function getContext(): ContextInterface
+    public function getKernel(): KernelInterface
     {
-        return $this->context;
+        return $this->kernel;
     }
 
     /**
+     * @return ExchangeInterface
+     *
      * Creates a copy of the current message exchange so that it can be
-     * forwarded to another destination
+     * forwarded to another destination.
      */
     public function copy(): ExchangeInterface
     {
@@ -190,7 +201,7 @@ class DefaultExchange implements ExchangeInterface
      * @return void
      *
      * Set the current exception in exchange process.
-     * After being called, the ExchangeInterface::isFailed() method will return true
+     * After being called, the ExchangeInterface::isFailed() method will return true.
      */
     public function setException(\Throwable $exception)
     {
@@ -232,7 +243,7 @@ class DefaultExchange implements ExchangeInterface
     /**
      * @return string
      *
-     * Get the exchange id
+     * Get the exchange id.
      */
     public function getExchangeId(): string
     {
@@ -243,7 +254,7 @@ class DefaultExchange implements ExchangeInterface
      * @param string $exchangeId
      * @return void
      *
-     * Set the exchange id
+     * Set the exchange id.
      */
     public function setExchangeId(string $exchangeId)
     {
