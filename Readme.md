@@ -9,7 +9,7 @@ the goal is to build a framework to write applications that needs more than only
 Message
 ---
 
-Message exchange abstraction layer for network protocols.
+Message exchange abstraction layer for routing and network communication.
 This can describe messages of a lot of protocols such as http, smtp, imap and even irc.
 
 This layer is used by avalonia's routing engine too for allowing endpoints to communicate.

@@ -1,6 +1,6 @@
 {
     "name": "avalonia/message",
-    "description": "Network protocols message abstraction layer",
+    "description": "Message exchange abstraction layer for routing and network communication",
     "require": {
         "container-interop/container-interop": "^1.1",
         "avalonia/core": "^0.1@dev",
