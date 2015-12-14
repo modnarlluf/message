@@ -1,0 +1,29 @@
+{
+    "name": "avalonia/message",
+    "description": "Network protocols message abstraction layer",
+    "require": {
+        "container-interop/container-interop": "^1.1",
+        "avalonia/core": "^0.1@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.1"
+    },
+    "license": "LGPL-v3+",
+    "authors": [
+        {
+            "name": "Benjamin Perche",
+            "email": "benjamin@perche.me"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "Avalonia\\Component\\Message\\": "src/Avalonia/Component/Message/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Avalonia\\Component\\Message\\Tests": "tests"
+        }
+    }
+}
