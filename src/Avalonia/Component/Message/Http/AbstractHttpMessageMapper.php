@@ -3,10 +3,14 @@ declare(strict_types=1);
 
 namespace Avalonia\Component\Message\Http;
 
-use Avalonia\Component\Message\Exception\MapperInvalidDataException;
-use Avalonia\Component\Message\Exception\MapperMaxLineLengthException;
+use Avalonia\Component\Message\Exception\{
+    MapperInvalidDataEofFoundException,
+    MapperInvalidDataException,
+    MapperMaxLineLengthException
+};
 use Avalonia\Component\Message\MessageMapperInterface;
 use Hoa\Stream\IStream\In;
+use Hoa\Stream\IStream\Out;
 
 /**
  * Class HttpMessageMapper
@@ -24,6 +28,7 @@ abstract class AbstractHttpMessageMapper implements MessageMapperInterface
     /**
      * @param In $inputStream
      * @param bool $keepCrlf If true, the line ending CRLF will be returned in the string
+     * @param int $offset An offset tracker for the stream
      * @param int $maxLineLength The max line length. If it is reached, an exception will be thrown
      * @return string
      *
@@ -35,15 +40,19 @@ abstract class AbstractHttpMessageMapper implements MessageMapperInterface
     protected function readHttpLine(
         In $inputStream,
         bool $keepCrlf = false,
+        int &$offset = null,
         int $maxLineLength = self::DEFAULT_MAX_LINE_LENGTH
     ): string {
         $buffer = '';
         $lastChar = '';
         $bufferLength = 0;
+        $offset = $offset ?: 0;
 
         do {
             if ($inputStream->eof()) {
-                throw new MapperInvalidDataException("The given line has no end. Found EOF before CRLF.");
+                throw (new MapperInvalidDataEofFoundException("The given line has no end. Found EOF before CRLF."))
+                    ->setRemainingBufferData($buffer)
+                ;
             }
 
             if ($maxLineLength <= $bufferLength) {
@@ -53,6 +62,7 @@ abstract class AbstractHttpMessageMapper implements MessageMapperInterface
             $char = $inputStream->readCharacter();
             $buffer .= $char;
             $bufferLength++;
+            $offset++;
 
             if (static::LF === $char) {
                 if (static::CR !== $lastChar) {
@@ -68,5 +78,16 @@ abstract class AbstractHttpMessageMapper implements MessageMapperInterface
 
             $lastChar = $char;
         } while(true);
+    }
+
+    /**
+     * @param Out $outputStream
+     * @param string $line
+     *
+     * Writes the line ending with a CRLF on the output stream
+     */
+    protected function writeHttpLine(Out $outputStream, string $line)
+    {
+        $outputStream->writeString($line.static::CRLF);
     }
 }

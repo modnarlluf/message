@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Avalonia\Component\Message;
 
+use Avalonia\Component\Message\Exception\MessageBodyNotStringException;
 use Hoa\Stream\IStream\In;
 
 /**
@@ -147,6 +148,22 @@ class DefaultMessage implements MessageInterface
         return $this->headers;
     }
 
+
+    /**
+     * @param string $format The PECL regex to filter the names with
+     * @return \Generator
+     *
+     * Return a generator that yields all the headers whose name match the given format
+     */
+    public function getHeadersByNameFormat(string $format): \Generator
+    {
+        foreach ($this->headers as $name => $header) {
+            if (preg_match($format, $name)) {
+                yield $name => $header;
+            }
+        }
+    }
+
     /**
      * @return void
      *
@@ -224,6 +241,30 @@ class DefaultMessage implements MessageInterface
     public function getBody()
     {
         return $this->body;
+    }
+
+    /**
+     * @return mixed
+     *
+     * @throws \Avalonia\Component\Message\Exception\MessageBodyNotStringException
+     *
+     * Return the message body as a string
+     */
+    public function getBodyAsString(): string
+    {
+        if (null === $this->body) {
+            return '';
+        }
+
+        if (is_string($this->body) || (is_object($this->body) && method_exists($this->body, "__toString"))) {
+            return (string) $this->body;
+        }
+
+        if ($this->body instanceof In) {
+            return $this->body->readAll();
+        }
+
+        throw new MessageBodyNotStringException("The message body could not be converted to a string.");
     }
 
     /**

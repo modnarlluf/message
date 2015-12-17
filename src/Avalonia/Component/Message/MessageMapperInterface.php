@@ -21,7 +21,7 @@ interface MessageMapperInterface
      *
      * Maps the given stream into a message
      */
-    public function mapDataToStream(In $inputStream, MessageInterface $message)
+    public function mapDataToStream(In $inputStream, MessageInterface $message);
 
     /**
      * @param Out $outputStream The stream where the formatted message has to be written

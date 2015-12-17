@@ -24,7 +24,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Avalonia\\Component\\Message\\Tests": "tests"
+            "Avalonia\\Component\\Message\\Tests\\": "tests"
         }
     }
 }

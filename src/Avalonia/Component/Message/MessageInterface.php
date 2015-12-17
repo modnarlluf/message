@@ -84,6 +84,14 @@ interface MessageInterface
     public function getHeaders(): array;
 
     /**
+     * @param string $format The PECL regex to filter the names with
+     * @return \Generator
+     *
+     * Return a generator that yields all the headers whose name match the given format
+     */
+    public function getHeadersByNameFormat(string $format): \Generator;
+
+    /**
      * @return void
      *
      * Removes all the headers
@@ -133,6 +141,15 @@ interface MessageInterface
      * Return the message body.
      */
     public function getBody();
+
+    /**
+     * @return mixed
+     *
+     * @throws \Avalonia\Component\Message\Exception\MessageBodyNotStringException
+     *
+     * Return the message body as a string
+     */
+    public function getBodyAsString(): string;
 
     /**
      * @param string|In $body
